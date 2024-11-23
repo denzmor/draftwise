@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Player</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Check Player: {{ player_name }}</h1>
+        <p>
+            {% if in_exclusion %}
+                <strong>{{ player_name }} is in the exclusion list.</strong>
+                <form method="post">
+                    <button type="submit" name="action" value="remove_exclusion" class="btn btn-danger">Remove from Exclusion</button>
+                </form>
+            {% else %}
+                <strong>{{ player_name }} is NOT in the exclusion list.</strong>
+                <form method="post">
+                    <button type="submit" name="action" value="add_exclusion" class="btn btn-primary">Add to Exclusion</button>
+                </form>
+            {% endif %}
+        </p>
+        <p>
+            {% if in_must_include %}
+                <strong>{{ player_name }} is in the must include list.</strong>
+                <form method="post">
+                    <button type="submit" name="action" value="remove_must_include" class="btn btn-danger">Remove from Must Include</button>
+                </form>
+            {% else %}
+                <strong>{{ player_name }} is NOT in the must include list.</strong>
+                <form method="post">
+                    <button type="submit" name="action" value="add_must_include" class="btn btn-success">Add to Must Include</button>
+                </form>
+            {% endif %}
+        </p>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</body>
+</html>		

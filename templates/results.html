@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Exclusion List</h2>
+    <ul>
+        {% for player in exclusion_list %}
+            <li>{{ player }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Must Include List</h2>
+    <ul>
+        {% for player in must_include_list %}
+            <li>{{ player }}</li>
+        {% endfor %}
+    </ul>
+    
+    <form method="POST" action="{{ url_for('clear_lists') }}">
+        <button type="submit">Clear Lists</button>
+    </form>
+    
+    <a href="{{ url_for('index') }}">Back</a>
+</body>
+</html>

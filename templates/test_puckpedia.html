@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PuckPedia Connector Test</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://puckpedia.com/connector/styles" />
+    <script src="https://puckpedia.com/connector/script" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>PuckPedia Connector Test</h1>
+        <p>
+            In this test, we will check if the PuckPedia Connector can link player names correctly.
+        </p>
+        <h2>Test Players</h2>
+        <ul>
+            <li>Artemi Panarin</li>
+            <li>Panarin</li>
+            <li>Panarin, Artemi</li>
+            <li>Connor McDavid</li>
+            <li>Sidney Crosby</li>
+            <li>Alex Ovechkin</li>
+            <li>Leon Draisaitl</li>
+        </ul>
+        <p>
+            If the connector is working, the player names above should be converted into links to their respective PuckPedia pages.
+        </p>
+    </div>
+
+    <script>
+        var ppOptions = {
+            targetSelector: "body",  // This selector matches the entire body for PuckPedia links
+            scope: "players",         // Can be "all", "players", or "teams"
+            linkMode: "popup",        // Can be "popup" or "link"
+            linkTarget: "_blank"      // Can be "_blank" or "_self"
+        };
+    </script>
+</body>
+</html>

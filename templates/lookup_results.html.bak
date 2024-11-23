@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="https://puckpedia.com/connector/styles" />
+    <script src="https://puckpedia.com/connector/script" defer></script>
+</head>
+<body>
+    <h2>Search Results:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Player Name</th>
+                <th>Points / Shutouts</th>
+                <th>Position</th>
+                <th>Total Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in results.itertuples() %}
+            <tr>
+                <td>{{ player.Index }}</td>
+                <td>{{ player.PlayerName }}</td>
+                <td>{{ player.P if hasattr(player, 'P') else player.SO }}</td>
+                <td>{{ player.Pos }}</td>
+                <td>${{ "{:,.2f}".format(player.Total_Salary) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>

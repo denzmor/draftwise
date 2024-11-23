@@ -1,0 +1,96 @@
+        goalies.at[idx, 'Total Salary'] * var for idx, var in goalies_vars.items()])
+        <= 88_000_000
+    ), "Total_Salary_Cap"
+
+    # Position constraints
+    prob += pulp.lpSum(attackers_vars.values()) == 9, "Total_Attackers"
+    prob += pulp.lpSum(defensemen_vars.values()) == 4, "Total_Defensemen"
+    prob += pulp.lpSum(goalies_vars.values()) == 2, "Total_Goalies"
+
+    # Solve the problem
+    solver = pulp.PULP_CBC_CMD(msg=0)
+    prob.solve(solver)
+
+    # Check the status
+    if prob.status != pulp.LpStatusOptimal:
+        print("Warning: Could not find an optimal solution.")
+        return 0, 0
+
+    # Extract selected players
+    selected_attackers_indices = [idx for idx, var in attackers_vars.items() if var.varValue == 1]
+    selected_defensemen_indices = [idx for idx, var in defensemen_vars.items() if var.varValue == 1]
+    selected_goalies_indices = [idx for idx, var in goalies_vars.items() if var.varValue == 1]
+
+    selected_attackers = attackers.loc[selected_attackers_indices]
+    selected_defensemen = defensemen.loc[selected_defensemen_indices]
+    selected_goalies = goalies.loc[selected_goalies_indices]
+
+    # Total salary and score
+    total_salary = (
+        selected_attackers['Total Salary'].sum() +
+        selected_defensemen['Total Salary'].sum() +
+        selected_goalies['Total Salary'].sum()
+    )
+    total_score = (
+        selected_attackers['Score'].sum() +
+        selected_defensemen['Score'].sum() +
+        selected_goalies['Score'].sum()
+    )
+
+    return total_score, total_salary
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        player_keyword = request.form.get('player_keyword')
+        list_type = request.form.get('list_type')
+        
+        # Load player data
+        skaters_data = pd.read_excel('players-2024.xlsx', sheet_name='Skaters', header=0)
+        goalies_data = pd.read_excel('players-2024.xlsx', sheet_name='Goalies', header=0)
+        
+        # Combine and normalize player names
+        all_players = pd.concat([skaters_data, goalies_data], ignore_index=True)
+        all_players['PlayerName_normalized'] = all_players['PlayerName'].apply(normalize_string)
+        
+        # Search for players
+        keyword_normalized = normalize_string(player_keyword)
+        matching_players = all_players[all_players['PlayerName_normalized'].str.contains(keyword_normalized, na=False)]
+        
+        # Write to appropriate list file
+        if list_type == 'exclusion':
+            filename = 'exclusion.txt'
+        else:
+            filename = 'must_include.txt'
+        
+        # Append unique players to the list
+        with open(filename, 'a', encoding='utf-8') as file:
+            for player in matching_players['PlayerName'].unique():
+                file.write(f"{player}\n")
+        
+        return redirect(url_for('index'))
+
+    return render_template('index.html')
+
+@app.route('/run', methods=['GET'])
+def run_script():
+    total_score, total_salary = run_nhl_pool()
+    return render_template('results.html', total_score=total_score, total_salary=total_salary)
+
+@app.route('/view_lists', methods=['GET'])
+def view_lists():
+    exclusion_list = read_list_from_file('exclusion.txt')
+    must_include_list = read_list_from_file('must_include.txt')
+    return render_template('lists.html', 
+                           exclusion_list=exclusion_list, 
+                           must_include_list=must_include_list)
+
+@app.route('/clear_lists', methods=['POST'])
+def clear_lists():
+    # Clear exclusion and must_include lists
+    open('exclusion.txt', 'w').close()
+    open('must_include.txt', 'w').close()
+    return redirect(url_for('view_lists'))
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

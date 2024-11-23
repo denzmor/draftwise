@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .logo img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .results-table {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">DraftWise</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container main-container">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="{{ url_for('static', filename='draftwise.jpg') }}" alt="DraftWise Logo" class="img-fluid">
+        </div>
+
+        <!-- Search Results Header -->
+        <h1>Search Results</h1>
+
+        <!-- Results Table -->
+        {% if results %}
+            <div class="table-responsive results-table">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Player Name</th>
+                            <th>Index</th>
+                            <th>Position</th>
+                            <th>Age</th>
+                            <th>GP</th>
+                            <th>Points</th>
+                            <th>Total Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in results %}
+                            <tr>
+                                <td><a href="{{ url_for('check_player', player_name=player.PlayerName) }}">{{ player.PlayerName }}</a></td>
+                                <td>{{ player.Index }}</td>
+                                <td>{{ player.Pos }}</td>
+                                <td>{{ player.Age }}</td>
+                                <td>{{ player.GP }}</td>
+                                <td>{{ player.P }}</td>
+                                <td>${{ "{:,.2f}".format(player['Total Salary']) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>No results found for your search.</p>
+        {% endif %}
+
+        <!-- Back to Home Button -->
+        <a href="{{ url_for('index') }}" class="btn btn-primary mt-4">Back to Home</a>
+    </div>
+</body>
+</html>
+

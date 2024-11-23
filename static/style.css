@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    line-height: 1.6; /* Improves readability */
+    max-width: 800px; /* Prevents ultra-wide layouts */
+    margin: 20px auto; /* Centers content */
+}
+
+input[type="text"] {
+    width: 100%; /* Full width on mobile */
+    max-width: 400px; /* Limits width on larger screens */
+    border: 1px solid #ddd; /* Adds a subtle border */
+}
+
+h1 {
+    color: #333;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer; /* Shows it's clickable */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px;
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+}
+
+a:hover {
+    background-color: #0056b3;
+}

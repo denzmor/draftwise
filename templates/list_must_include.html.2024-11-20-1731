@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Must Include List</title>
+</head>
+<body>
+    <h2>Must Include List</h2>
+    <ul>
+        {% for player in must_include_list %}
+            <li>
+                {{ player }} 
+                <form action="/remove_must_include" method="POST" style="display:inline;">
+                    <input type="hidden" name="player" value="{{ player }}">
+                    <button type="submit">Remove</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/">Back to Home</a>
+</body>
+</html>

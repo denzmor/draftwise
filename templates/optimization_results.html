@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://puckpedia.com/connector/script" defer></script>
+    
+    <title>Optimization Results</title>
+</head>
+<body>
+    <h1>Optimization Results</h1>
+    <p>Total Salary: {{ total_salary }}</p>
+    <p>Total Score: {{ total_score }}</p>
+
+    <h2>Selected Attackers</h2>
+    <ul>
+        {% for player in selected_attackers %}
+            <li>
+                <a href="{{ url_for('check_player', player_name=player['name']) }}">{{ player['name'] }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Selected Defensemen</h2>
+    <ul>
+        {% for player in selected_defensemen %}
+            <li>
+                <a href="{{ url_for('check_player', player_name=player['name']) }}">{{ player['name'] }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Selected Goalies</h2>
+    <ul>
+        {% for player in selected_goalies %}
+            <li>
+                <a href="{{ url_for('check_player', player_name=player['name']) }}">{{ player['name'] }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('optimize') }}">Run Optimization Again</a>
+
+    <script>
+        // Function to reformat player names from "LastName, FirstName" to "FirstName LastName"
+        function reformatPlayerNames() {
+            const playerElements = document.querySelectorAll('.player-name');
+            playerElements.forEach(el => {
+                const nameParts = el.textContent.split(', ');
+                if (nameParts.length === 2) {
+                    el.textContent = `${nameParts[1]} ${nameParts[0]}`; // Swap and remove the comma
+                }
+            });
+        }
+
+        // Configure PuckPedia options
+        var ppOptions = {
+            targetSelector: ".player-list",  // Focus only on player lists
+            scope: "players",               // Scope is restricted to players
+            linkMode: "popup",              // Show hover popup
+            linkTarget: "_self"            // Open links in a new tab
+        };
+
+        // Initialize PuckPedia Connector after reformatting names
+        window.addEventListener('DOMContentLoaded', function () {
+            reformatPlayerNames(); // Reformat names dynamically
+            PuckPediaConnector.init(ppOptions); // Initialize connector
+        });
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Must Include List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .logo img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .must-include-list {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .must-include-item {
+            display: flex; /* Flexbox ensures alignment */
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+        .btn-remove {
+            margin-left: 10px;
+            white-space: nowrap; /* Prevents button text from wrapping */
+        }
+        .alert-warning {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">DraftWise</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <!-- Other navbar links can go here -->
+                </ul>
+            </div>
+            <!-- Always-visible Logout Button -->
+            <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm ml-2">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container main-container">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="{{ url_for('static', filename='draftwise.jpg') }}" alt="DraftWise Logo" class="img-fluid">
+        </div>
+
+        <!-- Must Include List Header -->
+        <h2>Must Include List</h2>
+
+        <!-- Warning for More Than 16 Entries -->
+        {% if must_include_list|length > 15 %}
+            <div class="alert alert-warning">
+                Warning: You have more than 15 entries in the Must Include List!
+            </div>
+        {% endif %}
+
+        <!-- Must Include List -->
+        <div class="must-include-list row">
+            {% if must_include_list %}
+                {% for player in must_include_list %}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="must-include-item">
+                            <span>{{ player }}</span>
+                            <form action="/remove_must_include" method="POST" style="margin: 0;">
+                                <input type="hidden" name="player" value="{{ player }}">
+                                <button type="submit" class="btn btn-danger btn-sm btn-remove">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No players in the must-include list.</p>
+            {% endif %}
+        </div>
+
+        <!-- Back to Home Button -->
+        <a href="{{ url_for('index') }}" class="btn btn-primary mt-4">Back to Home</a>
+    </div>
+</body>
+</html>
+

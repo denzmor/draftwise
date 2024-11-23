@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftWise</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .logout-container {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logout button at the top-right corner -->
+    <div class="logout-container">
+        <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm">Logout</a>
+    </div>
+    <div class="container">
+        <!-- Center the logo -->
+        <div class="text-center">
+            <img src="{{ url_for('static', filename='draftwise.jpg') }}" alt="DraftWise Logo" style="width: 30%; height: auto;" />
+        </div>
+        <br>
+        <!-- Search Form -->
+        <form method="POST" action="/search" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="keyword" class="form-control" placeholder="Search for a player..." required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-secondary">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="mt-3">
+            <a href="/list_exclusions" class="btn btn-info">List Exclusions</a>
+            <a href="/list_must_include" class="btn btn-info">List Must Include</a>
+	    <br>
+	    <br>
+        </div>
+
+        <!-- Optimization Button -->
+        <form method="POST" action="/optimize">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Run Optimization</button>
+        </form>
+
+        <div class="results">
+            {% if total_salary is not none %}
+                <h2>Results:</h2>
+                <p><strong>Total Salary:</strong> ${{ "{:,.2f}".format(total_salary) }}</p>
+                <p><strong>Total Score:</strong> {{ total_score }}</p>
+
+                <h3>Selected Attackers:</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Player Name</th>
+                            <th>Position</th>
+                            <th>Score</th>
+                            <th>Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in selected_attackers %}
+                            <tr>
+                                <td><a href="{{ url_for('check_player', player_name=player.PlayerName) }}">{{ player.PlayerName }}</a></td>
+                                <td>{{ player.Pos }}</td>
+                                <td>{{ player.Score }}</td>
+                                <td>${{ "{:,.2f}".format(player['Total Salary']) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <h3>Selected Defensemen:</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Player Name</th>
+                            <th>Position</th>
+                            <th>Score</th>
+                            <th>Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in selected_defensemen %}
+                            <tr>
+                                <td><a href="{{ url_for('check_player', player_name=player.PlayerName) }}">{{ player.PlayerName }}</a></td>
+                                <td>{{ player.Pos }}</td>
+                                <td>{{ player.Score }}</td>
+                                <td>${{ "{:,.2f}".format(player['Total Salary']) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <h3>Selected Goalies:</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Player Name</th>
+                            <th>Position</th>
+                            <th>Score</th>
+                            <th>Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in selected_goalies %}
+                            <tr>
+                                <td><a href="{{ url_for('check_player', player_name=player.PlayerName) }}">{{ player.PlayerName }}</a></td>
+                                <td>{{ player.Pos }}</td>
+                                <td>{{ player.Score }}</td>
+                                <td>${{ "{:,.2f}".format(player['Total Salary']) }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No optimization results available. Please run the optimization.</p>
+            {% endif %}
+
+            {% if results %}
+                <h2>Search Results:</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Player Name</th>
+                            <th>Position</th>
+                            <th>Age</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in results %}
+                            <tr>
+  		                <td>{{ player.PlayerName }}</td>
+                                <td>{{ player.Pos }}</td>
+                                <td>{{ player.Age }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

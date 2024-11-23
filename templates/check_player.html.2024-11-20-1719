@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Player: {{ player_name }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://puckpedia.com/connector/styles" />
+    <script src="https://puckpedia.com/connector/script" defer></script>
+    <style>
+        .action-buttons {
+            display: flex;
+            gap: 10px; /* Add spacing between buttons */
+            align-items: center; /* Vertically center align the buttons */
+        }
+
+        .action-buttons form {
+            margin: 0; /* Remove extra margins */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Check Player: {{ player_name_for_connector }}</h1>
+        <div class="action-buttons">
+            <!-- Exclusion Buttons -->
+            <form method="post" style="display: inline;">
+                {% if in_exclusion %}
+                    <button type="submit" name="action" value="remove_exclusion" class="btn btn-danger">Remove from Exclusion</button>
+                {% else %}
+                    <button type="submit" name="action" value="add_exclusion" class="btn btn-primary">Add to Exclusion</button>
+                {% endif %}
+            </form>
+
+            <!-- Must-Include Buttons -->
+            <form method="post" style="display: inline;">
+                {% if in_must_include %}
+                    <button type="submit" name="action" value="remove_must_include" class="btn btn-danger">Remove from Must Include</button>
+                {% else %}
+                    <button type="submit" name="action" value="add_must_include" class="btn btn-success">Add to Must Include</button>
+                {% endif %}
+            </form>
+        </div>
+        <br>
+	<a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Home</a>
+    </div>
+
+    <script>
+        var ppOptions = {
+            targetSelector: ".container",  // This selector matches the entire body for PuckPedia links
+            scope: "all",            // Can be "all", "players", or "teams"
+            linkMode: "popup",       // Can be "popup" or "link"
+            linkTarget: "_blank",     // Can be "_blank" or "_self"
+	    playerName: "{{ player_name_for_connector }}"
+        };
+        window.addEventListener('DOMContentLoaded', function () {
+            PuckPediaConnector.init(ppOptions);
+        });	
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+2024-11-08 10:43:26,681 - INFO - NHL Pool Optimization App Created Successfully
+2024-11-08 10:43:26,691 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.2.107:5000
+2024-11-08 10:43:26,692 - INFO - [33mPress CTRL+C to quit[0m
+2024-11-08 10:43:26,692 - INFO -  * Restarting with stat
+2024-11-08 10:43:26,815 - INFO - NHL Pool Optimization App Created Successfully
+2024-11-08 10:43:26,825 - WARNING -  * Debugger is active!
+2024-11-08 10:43:26,827 - INFO -  * Debugger PIN: 773-481-581
+2024-11-08 10:43:33,467 - ERROR - 404 Error: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2024-11-08 10:43:33,469 - INFO - 192.168.2.164 - - [08/Nov/2024 10:43:33] "[33mGET / HTTP/1.1[0m" 404 -

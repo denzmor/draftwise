@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Search Results</h1>
+        {% if results %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Player Name</th>
+                        <th>Index</th>
+                        <th>Position</th>
+                        <th>Age</th>
+                        <th>GP</th>
+                        <th>Points</th>
+                        <th>Total Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in results %}
+                        <tr>
+                            <td><a href="{{ url_for('check_player', player_name=player.PlayerName) }}">{{ player.PlayerName }}</a></td>
+                            <td>{{ player.Index }}</td>
+                            <td>{{ player.Pos }}</td>
+                            <td>{{ player.Age }}</td>
+                            <td>{{ player.GP }}</td>
+                            <td>{{ player.P }}</td>
+                            <td>{{ player['Total Salary'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No results found for your search.</p>
+        {% endif %}
+        <a href="/" class="btn btn-primary">Back to Home</a>
+    </div>
+</body>
+</html>
